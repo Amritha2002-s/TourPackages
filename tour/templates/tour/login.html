@@ -1,0 +1,42 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; margin: auto;">
+        <h1 class="text-center">Login</h1>
+        <p class="text-center">Enter your credentials to access your account.</p>
+        <hr>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_username"><b>Username</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Username" name="username" id="id_username" required>
+
+            <label for="id_password"><b>Password</b></label>
+            <input type="password" class="form-control mb-3" placeholder="Enter Password" name="password" id="id_password" required>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if 'error' in message.tags %}
+                        <div class="alert alert-danger mt-2">
+                            {{ message }}
+                            </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

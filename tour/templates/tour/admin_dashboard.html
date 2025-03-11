@@ -1,0 +1,54 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="mb-3">Welcome to the Tour Management System!</h1>
+        <p>Explore amazing tour packages and start your adventure today.</p>
+        <hr>
+    </div>
+
+    <h2 class="mt-4">Admin Dashboard</h2>
+    <hr>
+
+    <div class="row">
+        <!-- Approve Vendors Card -->
+        <div class="col-sm-12 col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-check fa-2x text-warning mb-3"></i>
+                    <h5 class="card-title">Approve Vendors</h5>
+                    <p class="card-text">Review and approve vendors for the platform.</p>
+                    <a href="{% url 'vendor_list' %}" class="btn btn-warning w-100">Go to Vendors</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Packages Card -->
+        <div class="col-sm-12 col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-box-open fa-2x text-primary mb-3"></i>
+                    <h5 class="card-title">View Packages</h5>
+                    <p class="card-text">See all available tour packages.</p>
+                    <a href="{% url 'package_list' %}" class="btn btn-primary w-100">View Packages</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Users & Bookings Card -->
+        <!-- <div class="col-sm-12 col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-users-cog fa-2x text-success mb-3"></i>
+                    <h5 class="card-title">Manage Users & Bookings</h5>
+                    <p class="card-text">Handle users, bookings, and more.</p>
+                    <a href="{% url 'dashboard' %}" class="btn btn-success w-100">Manage Users</a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+{% endblock %}

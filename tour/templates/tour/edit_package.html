@@ -1,0 +1,62 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Edit Package{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm" style="max-width: 600px; margin: auto;">
+        <h1 class="text-center">Edit Package</h1>
+        <p class="text-center">Modify the details of your tour package below.</p>
+        <hr>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Package Title -->
+            <label for="id_title"><b>Package Title</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Package Title" name="title" id="id_title" value="{{ form.title.value|default_if_none:'' }}" required>
+
+            <!-- Description -->
+            <label for="id_description"><b>Description</b></label>
+            <textarea class="form-control mb-3" placeholder="Enter Package Description" name="description" id="id_description" required>{{ form.description.value|default_if_none:'' }}</textarea>
+
+            <!-- Price -->
+            <label for="id_price"><b>Price</b></label>
+            <input type="number" class="form-control mb-3" placeholder="Enter Price" name="price" id="id_price" value="{{ form.price.value|default_if_none:'' }}" required>
+
+            <!-- Duration -->
+            <label for="id_duration"><b>Duration (in days)</b></label>
+            <input type="number" class="form-control mb-3" placeholder="Enter Duration" name="duration" id="id_duration" value="{{ form.duration.value|default_if_none:'' }}" required>
+
+            <!-- Expiry Date -->
+            <label for="id_expiry_date"><b>Expiry Date</b></label>
+            <input type="date" class="form-control mb-3" name="expiry_date" id="id_expiry_date" value="{{ form.expiry_date.value|default_if_none:'' }}" required>
+
+            <!-- Availability -->
+            <label for="id_availability"><b>Availability</b></label>
+            <input type="number" class="form-control mb-3" name="availability" id="id_availability" value="{{ form.availability.value|default_if_none:'' }}" required>
+
+            <!-- Image -->
+            <label for="id_image"><b>Package Image</b></label>
+            <input type="file" class="form-control mb-3" name="image" id="id_image">
+            {% if form.instance.image %}
+                <p>Current Image:</p>
+                <img src="{{ form.instance.image.url }}" alt="Package Image" class="img-fluid mb-3" style="max-height: 150px;">
+            {% endif %}
+
+            <!-- Published Checkbox -->
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" name="is_published" id="id_is_published" {% if form.is_published.value %} checked {% endif %}>
+                <label class="form-check-label" for="id_is_published"><b>Publish this Package?</b></label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'vendor_dashboard' %}" class="btn btn-secondary w-100">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

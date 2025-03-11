@@ -1,0 +1,58 @@
+{% extends 'tour/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <img src="{{ package.image.url }}" class="card-img-top" alt="{{ package.title }}">
+                <div class="card-body text-center">
+                    <h2 class="card-title text-primary">{{ package.title }}</h2>
+                    <p class="text-muted">{{ package.description }}</p>
+                    <h4 class="text-success">₹{{ package.price }}</h4>
+                    <p><strong>Duration:</strong> {{ package.duration }} days</p>
+                    <p><strong>Expiry Date:</strong> {{ package.expiry_date }}</p>
+
+                    <!-- Payment Button -->
+                    <form action="{% url 'payment_success' %}" method="GET">
+                        <input type="hidden" name="package_id" value="{{ package.id }}">  
+                        <script 
+                            src="https://checkout.razorpay.com/v1/checkout.js"
+                            data-key="{{ razorpay_key_id }}"
+                            data-amount="{{ amount|floatformat:2 }}"
+                            data-currency="INR"
+                            data-order_id="{{ razorpay_order_id }}"
+                            data-buttontext="Pay Now"
+                            data-name="Tour Management"
+                            data-description="Package Booking"
+                            data-theme.color="#007bff"
+                            data-prefill.email="{{ request.user.email }}"
+                            data-prefill.contact="{{ request.user.profile.phone_number }}">
+                        </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Custom Styles -->
+<style>
+    .card-img-top {
+        height: 250px;
+        object-fit: cover;
+        border-radius: 10px 10px 0 0;
+    }
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'tour/base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="text-success">🎉 Payment Successful! 🎉</h2>
+    <p class="lead">Thank you for booking <strong>{{ package.name }}</strong>.</p>
+    <p>Your payment of <strong>₹{{ package.price }}</strong> has been received.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+</div>
+{% endblock %}

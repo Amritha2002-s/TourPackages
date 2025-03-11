@@ -1,0 +1,53 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Vendor Approvals{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="mb-4">Manage Vendors</h2> 
+
+        {% if vendors %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Vendor Username</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendor in vendors %}
+                        <tr class="{% if not vendor.is_approved %}table-secondary{% endif %}">
+                            <td>{{ vendor.company_name }}</td>
+                            <td>{{ vendor.user.username }}</td>
+                            <td>
+                                {% if vendor.is_approved %}
+                                    <span class="text-success">Approved</span>
+                                {% else %}
+                                    <span class="text-danger">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not vendor.is_approved %}
+                                    <a href="{% url 'approve_vendor' vendor.id %}" class="btn btn-success btn-sm">
+                                        Approve
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'disable_vendor' vendor.id %}" class="btn btn-warning btn-sm">
+                                        Disable
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'reject_vendor' vendor.id %}" class="btn btn-danger btn-sm">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No vendors found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

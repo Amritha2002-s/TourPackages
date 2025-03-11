@@ -1,0 +1,15 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Welcome to Tour Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1 class="mb-3">Welcome to the Tour Management System!</h1>
+    <p>Explore amazing tour packages and start your adventure today.</p>
+    <hr>
+
+    <div class="mt-4">
+        <a href="{% url 'package_list' %}" class="btn btn-primary">View Packages</a>
+    </div>
+</div>
+{% endblock %}

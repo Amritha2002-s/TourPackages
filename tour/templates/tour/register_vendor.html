@@ -1,0 +1,71 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Vendor Registration{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm" style="max-width: 500px; margin: auto;">
+        <h1 class="text-center">Vendor Registration</h1>
+        <p class="text-center">Fill in the form below to create a vendor account.</p>
+        <hr>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_first_name"><b>First Name</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter First Name" name="first_name" id="id_first_name" required>
+
+            <label for="id_last_name"><b>Last Name</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Last Name" name="last_name" id="id_last_name" required>
+
+            <label for="id_username"><b>Username</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Username" name="username" id="id_username" required>
+
+            <label for="id_email"><b>Email</b></label>
+            <input type="email" class="form-control mb-3" placeholder="Enter Email" name="email" id="id_email" required>
+
+            <label for="id_company_name"><b>Company Name</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Company Name" name="company_name" id="id_company_name" required>
+
+            <label for="id_password1"><b>Password</b></label>
+            <input type="password" class="form-control mb-3" placeholder="Enter Password" name="password1" id="id_password1" required>
+
+            <label for="id_password2"><b>Repeat Password</b></label>
+            <input type="password" class="form-control mb-3" placeholder="Repeat Password" name="password2" id="id_password2" required>
+
+            <hr>
+            <p>By creating an account, you agree to our <a href="#">Terms & Privacy</a>.</p>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Already have an account? <a href="{% url 'login' %}">Sign in</a>.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("id_password1").addEventListener("input", function () {
+        let password = this.value;
+        let requirements = [
+            { regex: /.{8,}/, message: "At least 8 characters" },
+            { regex: /[A-Z]/, message: "1 uppercase letter" },
+            { regex: /[a-z]/, message: "1 lowercase letter" },
+            { regex: /[0-9]/, message: "1 number" },
+            { regex: /[!@#$%^&*]/, message: "1 special character (!@#$%^&*)" }
+        ];
+
+        let errors = requirements.filter(req => !req.regex.test(password)).map(req => req.message);
+        let messageBox = document.querySelector(".password-requirements");
+        if (!messageBox) {
+            messageBox = document.createElement("div");
+            messageBox.classList.add("password-requirements", "mt-2", "text-danger");
+            this.insertAdjacentElement("afterend", messageBox);
+        }
+
+        messageBox.innerHTML = errors.length ? "❌ " + errors.join("<br>❌ ") : "✅ Strong password!";
+        messageBox.style.color = errors.length ? "red" : "green";
+    });
+</script>
+{% endblock %}

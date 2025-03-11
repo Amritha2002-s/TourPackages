@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tour Management{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Ensures footer stays at the bottom */
+        html, body {
+            height: 100%;
+            overflow-y: scroll; /* Always reserve space for the vertical scrollbar */
+            margin: 0;
+        }
+
+        /* Content area */
+        .content {
+            flex: 1;
+        }
+
+        /* Custom Scrollbar styles */
+        body::-webkit-scrollbar {
+            width: 0px; /* Width of the scrollbar */
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0); /* Semi-transparent thumb */
+            border-radius: 10px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0); /* Light transparent track */
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #212529;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            
+                        {% if user.is_admin %}
+                            
+                                <a class="navbar-brand" href="{% url 'admin_dashboard' %}" >Tour Management</a>
+                            
+                        {% elif user.is_vendor %}
+                                <a class="navbar-brand" href="{% url 'vendor_dashboard' %}" >Tour Management</a>
+                            
+                        {% else %}
+                            
+                        <a class="navbar-brand" href="{% url 'home' %}">Tour Management</a>
+                            
+                        {% endif %}
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link text-white">Welcome, {{ user.username }}!</span>
+                    </li>
+                        {% if user.is_admin %}
+                            <li class="nav-item">
+                                <a href="{% url 'admin_dashboard' %}" class="btn text-white">Home</a>
+                            </li>
+                        {% elif user.is_vendor %}
+                            <li class="nav-item">
+                                <a href="{% url 'vendor_dashboard' %}" class="btn text-white">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'package_list' %}" class="btn text-white">Package</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'dashboard' %}" class="btn text-white">My Bookings</a>
+                            </li>
+                        {% endif %}
+
+                        <!-- Welcome message and logout button -->
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="btn text-danger">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="btn text-white">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'register' %}" class="btn text-white">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4 content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <p>&copy; 2025 Tour Management. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

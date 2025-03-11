@@ -1,0 +1,81 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Vendor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">Vendor Dashboard</h2>
+    <hr>
+
+    {% if not request.user.vendor.is_approved %}
+        <div class="alert alert-warning">
+            Your account is pending approval. Please wait for the admin to approve your account.
+        </div>
+    {% else %}
+        <a href="{% url 'create_package' %}" class="btn btn-primary mb-3">Add New Package</a>
+
+        <h3>Your Tour Packages</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for package in packages %}
+                    <tr>
+                        <td>{{ package.title }}</td>
+                        <td>${{ package.price }}</td>
+                        <td>{{ package.duration }} days</td>
+                        <td>
+                            <a href="{% url 'edit_package' package.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_package' package.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No packages found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3 class="mt-4">📋 Customer Bookings</h3>
+        {% if bookings %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Package</th>
+                        <th>Booking Date</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.user.first_name }} {{ booking.user.last_name }}</td>
+                            <td>{{ booking.user.email }}</td>
+                            <td>{{ booking.package.title }}</td>
+                            <td>{{ booking.booking_date|date:"d M Y, h:i A" }}</td>
+                            <td>
+                                {% if booking.payment_status %}
+                                    <span class="badge bg-success">Paid</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No bookings yet.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

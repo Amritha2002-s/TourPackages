@@ -1,0 +1,88 @@
+{% extends 'tour/base.html' %}
+{% load static %}
+{% load tz %} 
+
+{% block title %}Available Tour Packages{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Available Packages</h1>
+    <p class="text-center text-muted">Choose from our list of amazing packages and book your next adventure!</p>
+    <hr>
+
+    <div class="row">
+        {% for package in packages %}
+            <div class="col-md-4 mb-4">
+                <!-- Apply greyed-out effect if package is unpublished -->
+                <div class="card shadow-sm h-100 {% if not package.is_published %}bg-light text-muted{% endif %}">
+
+                    <!-- Handle missing images gracefully -->
+                    {% if package.image %}
+                        <img src="{{ package.image.url }}" class="card-img-top" 
+                             alt="{{ package.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'img/default-package.jpg' %}" class="card-img-top" 
+                             alt="Default Image" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ package.title }}</h5>
+                        <p class="card-text flex-grow-1">{{ package.description|truncatewords:20 }}</p>
+                        <p class="card-text"><b>Price:</b> ₹{{ package.price }}</p>
+                        <p class="card-text"><b>Duration:</b> {{ package.duration }} days</p>
+                        <p class="card-text"><b>Expiry Date:</b> {{ package.expiry_date }}</p>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Availability:</b> {{ package.availability }} slots left</li>
+                        <li class="list-group-item 
+                            {% if package.expiry_date and package.expiry_date < now %}text-danger{% else %}text-success{% endif %}">
+                            {% if package.expiry_date and package.expiry_date < now %}
+                                Expired
+                            {% else %}
+                                Available
+                            {% endif %}
+                        </li>
+                    </ul>
+
+                    <div class="card-body text-center">
+                        {% if request.user.is_staff %}
+                            <!-- Admin: Show toggle button -->
+                            <form method="post" action="{% url 'toggle_package_status' package.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn {% if package.is_published %}btn-danger{% else %}btn-success{% endif %} w-100">
+                                    {% if package.is_published %}Disable{% else %}Enable{% endif %}
+                                </button>
+                            </form>
+
+                            <!-- Admin: Show booking button even if the package is disabled -->
+                            <a href="{% url 'book_package' package.id %}" class="btn btn-primary w-100 mt-2">
+                                Book Now
+                            </a>
+
+                        {% elif not package.is_published %}
+                            <!-- Normal users cannot book disabled packages -->
+                            <button class="btn btn-secondary w-100" disabled>Disabled</button>
+
+                        {% elif package.expiry_date and package.expiry_date < now or package.availability == 0 %}
+                            <!-- Normal users cannot book expired or unavailable packages -->
+                            <button class="btn btn-secondary w-100" disabled>Unavailable</button>
+
+                        {% else %}
+                            <!-- Normal users booking -->
+                            <a href="{% url 'book_package' package.id %}" class="btn btn-primary w-100">
+                                Book Now
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No packages available at the moment. Check back later!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

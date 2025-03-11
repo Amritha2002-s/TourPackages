@@ -1,0 +1,42 @@
+{% extends 'tour/base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; margin: auto;">
+        <h1 class="text-center">Register</h1>
+        <p class="text-center">Create an account to get started.</p>
+        <hr>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_first_name"><b>First Name</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter First Name" name="first_name" id="id_first_name" required>
+
+            <label for="id_last_name"><b>Last Name</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Last Name" name="last_name" id="id_last_name" required>
+
+            <label for="id_username"><b>Username</b></label>
+            <input type="text" class="form-control mb-3" placeholder="Enter Username" name="username" id="id_username" required>
+
+            <label for="id_email"><b>Email</b></label>
+            <input type="email" class="form-control mb-3" placeholder="Enter Email" name="email" id="id_email" required>
+
+            <label for="id_password1"><b>Password</b></label>
+            <input type="password" class="form-control mb-3" placeholder="Enter Password" name="password1" id="id_password1" required>
+
+            <label for="id_password2"><b>Confirm Password</b></label>
+            <input type="password" class="form-control mb-3" placeholder="Repeat Password" name="password2" id="id_password2" required>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+            
