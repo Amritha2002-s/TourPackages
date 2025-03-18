@@ -44,8 +44,9 @@ python manage.py migrate
 ### **5️⃣ Create a Superuser**
 
 To create an admin user 
-Enter username, email, and password when prompted.
-(Enter 3 of them or else it will not be created)
+Enter username, email, and password when prompted.  
+(Enter 3 of them or else it will not be created)  
+Note:Admin is necessary to approve the vendor.  
 ```
 python manage.py createsuperuser
 
