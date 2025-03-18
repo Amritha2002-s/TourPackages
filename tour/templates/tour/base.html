@@ -77,14 +77,12 @@
                             </li>
                         {% elif user.is_vendor %}
                             <li class="nav-item">
-                                <a href="{% url 'vendor_dashboard' %}" class="btn text-white">Home</a>
+                                <a href="{% url 'vendor_dashboard' %}" class="btn btn-info me-2">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{% url 'package_list' %}" class="btn text-white">Package</a>
-                            </li>
+                            
                         {% else %}
                             <li class="nav-item">
-                                <a href="{% url 'dashboard' %}" class="btn text-white">My Bookings</a>
+                                <a href="{% url 'dashboard' %}" class="btn btn-primary me-2">My Bookings</a>
                             </li>
                         {% endif %}
 
@@ -97,7 +95,10 @@
                             <a href="{% url 'login' %}" class="btn text-white">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'register' %}" class="btn text-white">Sign Up</a>
+                            <a href="{% url 'register' %}" class="btn text-white">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'register_vendor' %}" class="btn text-white"> Vendor Register</a>
                         </li>
                     {% endif %}
                 </ul>
