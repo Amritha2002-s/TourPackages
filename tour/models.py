@@ -1,14 +1,48 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, email, password=None, **extra_fields):
+        """Creates a normal user"""
+        if not email:
+            raise ValueError("The Email field is required")
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        """Creates a superuser with admin access"""
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_admin', True)  
+
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_admin") is not True:
+            raise ValueError("Superuser must have is_admin=True.")
+
+        return self.create_user(username, email, password, **extra_fields)
 
 # ✅ Custom User Model (No Django Admin Access)
 class CustomUser(AbstractUser):
     is_vendor = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
+    objects = CustomUserManager()  # ✅ Attach custom manager
+
     def save(self, *args, **kwargs):
-        self.is_staff = self.is_admin  # ✅ Only admins can access Django admin
+        """Ensure admin users get proper Django Admin access"""
+        if self.is_admin:
+            self.is_staff = True
+            self.is_superuser = True  # ✅ Ensure admin is also superuser
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.username
 
 # ✅ Vendor Model (Requires Admin Approval)
 class Vendor(models.Model):
